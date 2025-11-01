@@ -1,0 +1,35 @@
+{
+  "questId": "the_valley_king",
+  "questName": "The Valley King",
+  "questType": "story",
+  "area": "Gurhacia Valley",
+  "description": "The main story quest for Human characters. Investigate the mysterious Valley King threatening Gurhacia Valley.",
+  "race": "Human",
+  "difficulties": [
+    {
+      "difficulty": "Normal",
+      "recommendedLevel": 1,
+      "rewards": {
+        "meseta": 1000,
+        "experience": 500
+      }
+    }
+  ],
+  "requirements": {
+    "minLevel": 1,
+    "prerequisiteQuests": []
+  },
+  "objectives": [
+    {
+      "type": "reach_location",
+      "description": "Reach the Valley King's lair"
+    },
+    {
+      "type": "defeat_boss",
+      "description": "Defeat the Valley King",
+      "target": "valley_king_boss"
+    }
+  ],
+  "isRepeatable": false,
+  "isSecret": false
+}

@@ -1,0 +1,9 @@
+{
+  "areaId": "rioh_snowfield",
+  "areaName": "Rioh Snowfield",
+  "description": "A frozen tundra with ice caves and blizzard conditions. Home to the CAST storyline.",
+  "unlockCondition": "Complete Newman story quest",
+  "recommendedLevel": 8,
+  "environment": "snow",
+  "questCount": 4
+}

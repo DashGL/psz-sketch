@@ -1,0 +1,9 @@
+{
+  "areaId": "eternal_tower",
+  "areaName": "Eternal Tower",
+  "description": "A mysterious 101-floor tower that serves as the ultimate endgame challenge. Bosses appear every 10 floors.",
+  "unlockCondition": "Complete all main story quests",
+  "recommendedLevel": 30,
+  "environment": "tower",
+  "questCount": 1
+}

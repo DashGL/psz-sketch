@@ -1,0 +1,48 @@
+{
+  "questId": "eternal_tower",
+  "questName": "Eternal Tower",
+  "questType": "post_game",
+  "area": "Eternal Tower",
+  "description": "The ultimate endgame challenge. Climb 101 floors of increasingly difficult enemies and bosses.",
+  "difficulties": [
+    {
+      "difficulty": "Normal",
+      "recommendedLevel": 30,
+      "rewards": {
+        "meseta": 50000,
+        "experience": 20000
+      }
+    },
+    {
+      "difficulty": "Hard",
+      "recommendedLevel": 40,
+      "rewards": {
+        "meseta": 100000,
+        "experience": 50000
+      }
+    },
+    {
+      "difficulty": "Super Hard",
+      "recommendedLevel": 50,
+      "rewards": {
+        "meseta": 200000,
+        "experience": 100000
+      }
+    }
+  ],
+  "requirements": {
+    "minLevel": 30,
+    "prerequisiteQuests": ["the_valley_king", "swamp_devil", "memories_opened"]
+  },
+  "objectives": [
+    {
+      "type": "reach_location",
+      "description": "Reach floor 101",
+      "target": "floor_101"
+    }
+  ],
+  "isRepeatable": true,
+  "isSecret": false,
+  "floors": 101,
+  "bossFrequency": 10
+}

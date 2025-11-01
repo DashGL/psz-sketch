@@ -1,0 +1,9 @@
+{
+  "areaId": "ozette_wetlands",
+  "areaName": "Ozette Wetlands",
+  "description": "A murky swamp filled with dangerous creatures and treacherous terrain.",
+  "unlockCondition": "Complete Human story quest",
+  "recommendedLevel": 5,
+  "environment": "swamp",
+  "questCount": 4
+}

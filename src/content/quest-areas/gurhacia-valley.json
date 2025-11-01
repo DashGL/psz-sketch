@@ -1,0 +1,8 @@
+{
+  "areaId": "gurhacia_valley",
+  "areaName": "Gurhacia Valley",
+  "description": "A lush valley with grasslands and forests. The starting area for most adventurers.",
+  "recommendedLevel": 1,
+  "environment": "grasslands",
+  "questCount": 5
+}
