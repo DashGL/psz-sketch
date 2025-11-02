@@ -1,14 +1,38 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
+		react(),
 		starlight({
 			title: 'Density Dwarf',
+			head: [
+				{
+					tag: 'script',
+					attrs: {
+						src: 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js',
+					},
+				},
+				{
+					tag: 'script',
+					content: 'mermaid.initialize({ startOnLoad: true, theme: "default" });',
+				},
+			],
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
+				{
+					label: 'Architecture',
+					items: [
+						{ label: 'Overview', slug: 'architecture/overview' },
+						{ label: 'User Flow', slug: 'architecture/user-flow' },
+						{ label: 'API Contracts', slug: 'architecture/api-contracts' },
+						{ label: 'System Architecture', slug: 'architecture/system-architecture' },
+						{ label: 'Data Flow', slug: 'architecture/data-flow' },
+					],
+				},
 				{
 					label: 'Screens',
 					items: [

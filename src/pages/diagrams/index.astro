@@ -1,0 +1,96 @@
+---
+const diagrams = [
+  { name: 'User Flow', href: '/diagrams/user-flow', description: 'Complete user journey from title screen to city' },
+  { name: 'API Contracts', href: '/diagrams/api-contracts', description: 'Screen-to-API relationships and contracts' },
+  { name: 'System Architecture', href: '/diagrams/system-architecture', description: 'High-level component architecture' },
+  { name: 'Data Flow', href: '/diagrams/data-flow', description: 'Chronological sequence diagram' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture Diagrams - Density Dwarf</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    p {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    .diagrams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .diagram-card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+    .diagram-card:hover {
+      border-color: #0066cc;
+      box-shadow: 0 4px 12px rgba(0,102,204,0.1);
+      transform: translateY(-2px);
+    }
+    .diagram-card h2 {
+      font-size: 1.25rem;
+      color: #0066cc;
+      margin-bottom: 0.5rem;
+    }
+    .diagram-card p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Architecture Diagrams</h1>
+    <p>Visual diagrams showing the system architecture and data flow for Density Dwarf</p>
+
+    <div class="diagrams-grid">
+      {diagrams.map(diagram => (
+        <a href={diagram.href} class="diagram-card">
+          <h2>{diagram.name}</h2>
+          <p>{diagram.description}</p>
+        </a>
+      ))}
+    </div>
+
+    <a href="/" class="back-link">← Back to Documentation</a>
+  </div>
+</body>
+</html>

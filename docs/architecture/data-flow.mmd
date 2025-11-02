@@ -1,0 +1,85 @@
+sequenceDiagram
+    participant Browser
+    participant TitleScreen
+    participant SyncScreen
+    participant CharSelect
+    participant ModeSelect
+    participant City
+    participant API
+    participant DB
+    participant CDN
+
+    Note over Browser,CDN: Authentication Flow
+
+    Browser->>TitleScreen: Navigate to /
+    TitleScreen->>Browser: Check localStorage for private key
+
+    alt No private key
+        Browser->>Browser: Generate ED25519 key pair
+        Browser->>Browser: Store private key in localStorage
+    end
+
+    TitleScreen->>API: POST /api/auth/challenge<br/>{publicKey}
+    API->>API: Generate nonce
+    API->>TitleScreen: {nonce}
+
+    TitleScreen->>Browser: Sign nonce with private key
+    Browser->>TitleScreen: {signature}
+
+    TitleScreen->>API: POST /api/auth/verify<br/>{publicKey, signature}
+    API->>API: Verify signature with publicKey
+    API->>DB: CREATE session
+    API->>TitleScreen: {sessionToken}
+
+    Note over Browser,CDN: Asset Synchronization
+
+    TitleScreen->>SyncScreen: Redirect to /sync
+
+    SyncScreen->>API: GET /api/sync/manifest
+    API->>SyncScreen: {version, assets: {url: hash}}
+
+    SyncScreen->>Browser: Check localForage cache
+    Browser->>SyncScreen: Missing/outdated assets list
+
+    loop For each missing asset
+        SyncScreen->>CDN: GET /assets/path/to/asset
+        CDN->>SyncScreen: Asset blob
+        SyncScreen->>Browser: Store in localForage
+    end
+
+    Note over Browser,CDN: Character Selection
+
+    SyncScreen->>CharSelect: Redirect to /character-select
+
+    CharSelect->>API: GET /api/characters?publicKey=xxx
+    API->>DB: SELECT from character_state
+    DB->>API: Character rows
+    API->>CharSelect: {characters: []}
+
+    alt No characters
+        CharSelect->>CharSelect: Show "No character data"
+        Note over CharSelect: User clicks Create
+        CharSelect->>CharSelect: Navigate to /character-create
+        CharSelect->>API: POST /api/characters/create<br/>{race, class, appearance, name}
+        API->>DB: INSERT character_events (CHARACTER_CREATED)
+        API->>DB: Project to character_state
+        API->>CharSelect: {character}
+    end
+
+    CharSelect->>CharSelect: Display character list
+    Note over CharSelect: User clicks character
+
+    CharSelect->>ModeSelect: Navigate to /mode-select
+
+    Note over Browser,CDN: Mode Selection & City Entry
+
+    ModeSelect->>ModeSelect: Show Offline/Online options
+    Note over ModeSelect: User selects Offline
+
+    ModeSelect->>API: POST /api/city/enter<br/>{characterId}
+    API->>DB: SELECT character, quests, storage
+    DB->>API: Character state data
+    API->>ModeSelect: {cityState, notifications}
+
+    ModeSelect->>City: Redirect to /city
+    City->>City: Render city hub with services

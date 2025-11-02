@@ -1,0 +1,75 @@
+graph TD
+    subgraph "Title Screen (/)"
+        TS[Title Screen]
+    end
+
+    subgraph "Sync Screen (/sync)"
+        SS[Sync Screen]
+    end
+
+    subgraph "Character Select (/character-select)"
+        CS[Character Select]
+    end
+
+    subgraph "Character Create (/character-create)"
+        CC[Character Create]
+    end
+
+    subgraph "Mode Select (/mode-select)"
+        MS[Mode Select]
+    end
+
+    subgraph "City (/city)"
+        City[City Hub]
+    end
+
+    subgraph "API Server"
+        AuthAPI[Auth API]
+        SyncAPI[Sync API]
+        CharAPI[Character API]
+        CityAPI[City API]
+    end
+
+    %% Title Screen Flow
+    TS -->|1. POST /api/auth/challenge| AuthAPI
+    AuthAPI -->|Response: nonce| TS
+    TS -->|2. POST /api/auth/verify| AuthAPI
+    AuthAPI -->|Response: session| TS
+    TS -->|Navigate| SS
+
+    %% Sync Screen Flow
+    SS -->|3. GET /api/sync/manifest| SyncAPI
+    SyncAPI -->|Response: manifest| SS
+    SS -->|4. GET /assets/*| SyncAPI
+    SyncAPI -->|Response: asset blobs| SS
+    SS -->|Navigate| CS
+
+    %% Character Select Flow
+    CS -->|5. GET /api/characters| CharAPI
+    CharAPI -->|Response: character array| CS
+    CS -->|Click empty slot| CC
+    CS -->|Click existing char| MS
+
+    %% Character Create Flow
+    CC -->|6. POST /api/characters/create| CharAPI
+    CharAPI -->|Response: new character| CC
+    CC -->|Navigate| MS
+
+    %% Mode Select Flow
+    MS -->|7. POST /api/city/enter| CityAPI
+    CityAPI -->|Response: cityState| MS
+    MS -->|Navigate| City
+
+    %% API Contract Annotations
+    style AuthAPI fill:#ffcccc
+    style SyncAPI fill:#ccffcc
+    style CharAPI fill:#ccccff
+    style CityAPI fill:#ffffcc
+
+    %% Screens
+    style TS fill:#e1f5e1
+    style SS fill:#e1f5e1
+    style CS fill:#e1f5e1
+    style CC fill:#e1f5e1
+    style MS fill:#e1f5e1
+    style City fill:#e1f5e1

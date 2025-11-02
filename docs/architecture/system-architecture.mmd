@@ -1,0 +1,88 @@
+graph TB
+    subgraph "Client (Browser)"
+        UI[Astro Pages]
+        Assets[LocalForage Cache]
+        PrivKey[ED25519 Private Key<br/>localStorage]
+
+        UI --> Assets
+        UI --> PrivKey
+    end
+
+    subgraph "API Server (Node.js)"
+        Routes[API Routes]
+        Auth[Auth Service]
+        CharService[Character Service]
+        QuestService[Quest Service]
+        StorageService[Storage Service]
+        ShopService[Shop Service]
+
+        Routes --> Auth
+        Routes --> CharService
+        Routes --> QuestService
+        Routes --> StorageService
+        Routes --> ShopService
+    end
+
+    subgraph "Database (PostgreSQL)"
+        Sessions[(sessions)]
+        CharEvents[(character_events)]
+        CharState[(character_state)]
+        QuestDefs[(quest_definitions)]
+        QuestLog[(quest_log)]
+        Trunk[(character_trunk)]
+        JointTrunk[(account_joint_trunk)]
+        ShopInv[(shop_inventory)]
+
+        CharService --> CharEvents
+        CharService --> CharState
+        QuestService --> QuestDefs
+        QuestService --> QuestLog
+        StorageService --> Trunk
+        StorageService --> JointTrunk
+        ShopService --> ShopInv
+
+        CharEvents -.->|Event sourcing| CharState
+    end
+
+    subgraph "Asset Storage (CDN)"
+        Models[3D Models<br/>.glb]
+        Textures[Textures<br/>.png]
+        Audio[Audio<br/>.mp3]
+        Data[Game Data<br/>.json]
+    end
+
+    %% Client to Server
+    UI -->|HTTP/JSON| Routes
+    Auth -->|Verify signature| PrivKey
+
+    %% Client to Assets
+    UI -->|Fetch assets| Models
+    UI -->|Fetch assets| Textures
+    UI -->|Fetch assets| Audio
+    UI -->|Fetch assets| Data
+
+    %% Store in cache
+    Models --> Assets
+    Textures --> Assets
+    Audio --> Assets
+    Data --> Assets
+
+    %% Sessions
+    Auth --> Sessions
+
+    style UI fill:#e3f2fd
+    style Assets fill:#fff9c4
+    style PrivKey fill:#ffccbc
+    style Routes fill:#c8e6c9
+    style Sessions fill:#f8bbd0
+    style CharEvents fill:#f8bbd0
+    style CharState fill:#f8bbd0
+    style QuestDefs fill:#f8bbd0
+    style QuestLog fill:#f8bbd0
+    style Trunk fill:#f8bbd0
+    style JointTrunk fill:#f8bbd0
+    style ShopInv fill:#f8bbd0
+    style Models fill:#e1bee7
+    style Textures fill:#e1bee7
+    style Audio fill:#e1bee7
+    style Data fill:#e1bee7

@@ -1,0 +1,62 @@
+graph TD
+    Start([Player visits /])
+
+    Start --> CheckKey{Private key<br/>exists?}
+
+    CheckKey -->|No| GenKey[Generate ED25519<br/>private key]
+    CheckKey -->|Yes| LoadKey[Load private key<br/>from localStorage]
+
+    GenKey --> Auth[Send public key<br/>to server]
+    LoadKey --> Auth
+
+    Auth --> Challenge[Server sends<br/>challenge nonce]
+    Challenge --> Sign[Sign challenge<br/>with private key]
+    Sign --> Verify[Server verifies<br/>signature]
+
+    Verify --> Session[Create session]
+    Session --> Sync[Redirect to /sync]
+
+    Sync --> FetchManifest[GET /api/sync/manifest]
+    FetchManifest --> CompareCache{Assets<br/>up to date?}
+
+    CompareCache -->|No| DownloadAssets[Download missing/changed assets]
+    CompareCache -->|Yes| ValidateCache[Validate cache]
+
+    DownloadAssets --> StoreLocalForage[Store in localForage]
+    StoreLocalForage --> ValidateCache
+
+    ValidateCache --> CharSelect[Redirect to /character-select]
+
+    CharSelect --> FetchChars[GET /api/characters?publicKey=xxx]
+    FetchChars --> ShowSlots[Display 4 character slots]
+
+    ShowSlots --> ClickSlot{Click slot}
+    ClickSlot -->|Empty slot| CharCreate[Redirect to /character-create]
+    ClickSlot -->|Existing character| ModeSelect[Redirect to /mode-select]
+
+    CharCreate --> SelectRace[Select race:<br/>Human/CAST/Newman]
+    SelectRace --> SelectClass[Select class:<br/>14 options]
+    SelectClass --> Customize[Customize appearance:<br/>colors, variation]
+    Customize --> NameChar[Enter character name]
+    NameChar --> CreateChar[POST /api/characters/create]
+    CreateChar --> ModeSelect
+
+    ModeSelect[Redirect to /mode-select]
+    ModeSelect --> ChooseMode{Choose mode}
+    ChooseMode -->|Offline| SelectOffline[POST /api/city/enter]
+    ChooseMode -->|Online| OnlineLobby[Online lobby<br/>future feature]
+
+    SelectOffline --> City[Redirect to /city]
+
+    City --> CityHub[Display city hub<br/>with services]
+
+    style Start fill:#e1f5e1
+    style City fill:#e1f5e1
+    style Auth fill:#fff4e6
+    style Sync fill:#fff4e6
+    style CharSelect fill:#fff4e6
+    style ModeSelect fill:#fff4e6
+    style FetchManifest fill:#e3f2fd
+    style FetchChars fill:#e3f2fd
+    style CreateChar fill:#e3f2fd
+    style SelectOffline fill:#e3f2fd
