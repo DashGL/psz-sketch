@@ -3,7 +3,9 @@ title: Item Shop
 description: Purchase consumables, materials, and recovery items
 ---
 
-The Item Shop is accessed from the [City](/screens/city) hub and allows players to purchase consumable items, recovery items, materials, and other useful goods with meseta.
+![Item Shop NPC](/screenshots/shop-item.png)
+
+The Item Shop is accessed from the [City](/screens/city) hub and allows players to purchase consumable items, recovery items, and other useful goods with meseta. The shop has a fixed inventory of essential items plus a rotating selection of random items that changes each time you visit.
 
 ## Screen Flow
 
@@ -20,44 +22,61 @@ City → /city/shop/items → Browse and purchase → Return to City
 ## Purpose
 
 The Item Shop provides:
-- **Recovery Items**: Monomates, Dimates, Trimates, and fluids
-- **Status Cures**: Antidotes, antiparalysis, and other cure items
-- **Materials**: Crafting components and synthesis materials
-- **Consumables**: Temporary boost items and utilities
+- **Recovery Items**: Monomates, Dimates, Monofluids, Difluids, and atomizers
+- **Random Stock**: Low-level techniques, grinders, and rare consumables
 - **Restocking**: Replenish supplies between quests
+- **Selling**: Sell unwanted items from your inventory for meseta
 
 ## User Interface
 
-### Shop Layout
+### Main Menu
 
-**Left Panel - Shop Inventory**:
-- Grid or list of available items
-- Item icon, name, and description
-- Price in meseta
-- Stock quantity (if limited)
-- Item category tags
+When you access the Item Shop, you're presented with two options:
+- **Buy**: Purchase items from the shop
+- **Sell**: Sell items from your inventory
 
-**Right Panel - Character Info**:
-- Current meseta balance
-- Inventory slots (used/max)
-- Shopping cart or selected item
-- Purchase confirmation
+### Buy Interface
 
-**Item Categories**:
-- Recovery (HP/TP restoration)
-- Status Cure (ailment removal)
-- Materials (crafting components)
-- Boosters (temporary stat increases)
-- Utilities (teleporters, scaperolls, etc.)
+![Item Shop Buy Screen](/screenshots/shop-item-buy.png)
 
-### Purchase Flow
+**Shop Inventory List**:
+- Items displayed in vertical list with prices
+- Currently selected item highlighted in orange
+- Item icon on left, name in center, price on right
+- Scrollable list to view all available items
 
-1. **Browse Items**: Scroll through shop inventory
-2. **Select Item**: Click item to view details
-3. **Choose Quantity**: Select how many to purchase
-4. **Confirm Purchase**: Review total cost
-5. **Transaction**: Meseta deducted, items added to inventory
-6. **Receipt**: Confirmation message displayed
+**Character Info (Top Right)**:
+- **Item Pack**: Shows inventory slots (22/40 in screenshot)
+- Current meseta balance displayed at bottom right (1290 in screenshot)
+
+**Controls (Bottom Left)**:
+- **Qty**: Shows quantity to purchase (defaults to 0)
+- Adjust quantity before purchasing
+
+**Action Prompt**:
+- "Choose the item you wish to buy." displayed at bottom
+
+### Sell Interface
+
+![Item Shop Sell Screen](/screenshots/shop-item-sell.png)
+
+**Note**: The sell interface is shared between the Item Shop and Weapon Shop.
+
+**Inventory Filter Tabs**:
+- Filter buttons displayed above inventory list: "Usable", "Weapon", "Armor", "Special"
+- Currently selected filter highlighted in orange
+
+**Inventory List**:
+- Shows items from your inventory that can be sold
+- Item icon, name, and sell value displayed
+- Selected item highlighted in orange
+
+**Character Info**:
+- Shows current inventory slots and meseta
+- **Qty**: Shows quantity being sold
+
+**Action Prompt**:
+- "Choose the item you wish to sell." displayed at bottom
 
 ## Server API
 
@@ -257,50 +276,47 @@ Purchases are recorded in the `character_events` table:
 }
 ```
 
-## Shop Items by Category
+## Shop Inventory System
 
-### Recovery Items
+### Fixed Inventory
+
+These items are **always available** in the Item Shop:
 
 **HP Recovery**:
 - **Monomate**: 50 meseta - Restores small HP
-- **Dimate**: 150 meseta - Restores moderate HP
-- **Trimate**: 500 meseta - Restores large HP
+- **Dimate**: 150 meseta - Restores moderate HP (as seen in screenshot)
 
 **TP Recovery**:
-- **Monofluid**: 50 meseta - Restores small TP
-- **Difluid**: 150 meseta - Restores moderate TP
-- **Trifluid**: 500 meseta - Restores large TP
+- **Monofluid**: 100 meseta - Restores small TP (as seen in screenshot)
+- **Difluid**: Price TBD - Restores moderate TP
 
-**Combined Recovery**:
-- **Sol Atomizer**: 200 meseta - Restores HP to all party members
-- **Moon Atomizer**: 500 meseta - Revives fallen party member
+**Party Recovery**:
+- **Sol Atomizer**: 50 meseta - Restores HP to all party members (as seen in screenshot)
+- **Telepipe**: 100 meseta - Return to city from quest (as seen in screenshot)
+- **Moon Atomizer**: Price TBD - Revives fallen party member
 
-### Status Cure Items
+### Random Inventory
 
-- **Antidote**: 100 meseta - Cures poison
-- **Antiparalysis**: 100 meseta - Cures paralysis
-- **Cure/Freeze**: 150 meseta - Cures freeze status
-- **Cure/Shock**: 150 meseta - Cures shock status
-- **Cure/Slow**: 150 meseta - Cures slow status
-- **Star Atomizer**: 800 meseta - Cures all status ailments for party
+Each time you visit the shop, **additional random items** may appear:
 
-### Materials
+**Low-Level Techniques**:
+- Basic offensive and support techniques
+- Foie Lv1: 300 meseta (fire technique, as seen in screenshot)
+- Other starter techniques
 
-**Stat Materials** (prices TBD):
-- **Power Material**: +ATP
-- **Mind Material**: +MST
-- **Evade Material**: +EVP
-- **Def Material**: +DFP
-- **HP Material**: +Max HP
-- **TP Material**: +Max TP
-- **Luck Material**: +Luck (if stat exists)
+**Upgrade Materials**:
+- **Monogrinder**: Price TBD - Basic weapon grinding material
 
-### Utility Items
+**Rare Consumables**:
+- **Star Atomizer**: Price TBD - Cures all status ailments for party
+- Other utility items
 
-- **Telepipe**: 50 meseta - Return to city from quest
-- **Scaperoll**: 1000 meseta - Escape from battle
-- **Grinder**: 500 meseta - Weapon upgrade component
-- **Photon Drop**: Not sold (rare drop only)
+### Items NOT Sold
+
+The following cannot be purchased at shops:
+- **Photon Drops/Crystals**: Rare drop only
+- **High-level techniques**: Must be found or purchased elsewhere
+- **Rare materials**: Quest rewards or drops only
 
 ## Pricing System
 
@@ -326,6 +342,25 @@ When selling items to shop:
 
 ## Implementation Notes
 
+### Random Inventory Generation
+
+When the shop is accessed:
+1. Load fixed inventory items (always available)
+2. Generate random selection of additional items:
+   - Low-level techniques (random selection)
+   - Monogrinder (chance to appear)
+   - Star Atomizer (chance to appear)
+   - Other utility items
+3. Random items change each visit to encourage checking the shop regularly
+
+### Shared Sell Interface
+
+The Item Shop and Weapon Shop share the **same sell interface**:
+- Unified inventory filter tabs: "Usable", "Weapon", "Armor", "Special"
+- Shows all sellable items from character inventory
+- Sell prices calculated based on item type and rarity
+- Same transaction logic regardless of which shop you're in
+
 ### Inventory Management
 
 When purchasing items:
@@ -339,8 +374,7 @@ When purchasing items:
 Server must validate:
 - Character has sufficient meseta
 - Item exists in shop inventory
-- Stock is available (if limited)
-- Character meets level requirements
+- Character meets level requirements (if any)
 - Inventory has space
 
 ### Transaction Atomicity
@@ -355,9 +389,6 @@ BEGIN TRANSACTION;
 
   -- Record event
   INSERT INTO character_events (...) VALUES (...);
-
-  -- Update stock if limited
-  UPDATE shop_inventory SET stock_quantity = stock_quantity - $qty WHERE shop_item_id = $id;
 COMMIT;
 ```
 

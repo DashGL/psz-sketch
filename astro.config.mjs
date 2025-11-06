@@ -47,7 +47,6 @@ export default defineConfig({
 								{ label: 'Overview', slug: 'screens/city' },
 								{ label: 'Quest Counter', slug: 'screens/quest-counter' },
 								{ label: 'Storage Counter', slug: 'screens/storage-counter' },
-								{ label: 'Player Record', slug: 'screens/player-record' },
 								{ label: 'Item Shop', slug: 'screens/item-shop' },
 								{ label: 'Custom Shop', slug: 'screens/custom-shop' },
 								{ label: 'Weapon Shop', slug: 'screens/weapon-shop' },

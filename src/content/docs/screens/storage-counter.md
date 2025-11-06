@@ -57,9 +57,11 @@ When accessing the Personnel Counter, players see four options:
 - Player-to-player trading functionality
 - Only available in online/multiplayer mode
 
-**Player Record**:
-- View statistics and achievements
-- See [Player Record](/screens/player-record) documentation
+**Player Record** (future feature):
+- View character statistics and achievements
+- Track combat stats, quest completions, playtime, etc.
+- See server flags and progression milestones
+- *Note: Detailed implementation TBD*
 
 ### Trunk Storage Menu
 

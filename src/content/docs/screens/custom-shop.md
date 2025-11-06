@@ -1,9 +1,13 @@
 ---
 title: Custom Shop
-description: Character appearance customization and cosmetic changes
+description: Weapon customization through element synthesis and photon fortification
 ---
 
-The Custom Shop is accessed from the [City](/screens/city) hub and allows players to modify their character's appearance, including colors, hairstyle variations, and other cosmetic options.
+![Custom Shop NPC](/screenshots/shop-custom.png)
+
+The Custom Shop is accessed from the [City](/screens/city) hub and provides advanced weapon customization services. Players can add elemental attributes to weapons or enhance fully-grinded weapons with photon fortification.
+
+![Custom Shop Menu](/screenshots/shop-custom-buy.png)
 
 ## Screen Flow
 
@@ -14,73 +18,78 @@ The Custom Shop is accessed from the [City](/screens/city) hub and allows player
 ### Navigation
 
 ```
-City → /city/shop/custom → Customize appearance → Return to City
+City → /city/shop/custom → Select service → Customize weapon → Return to City
 ```
 
 ## Purpose
 
 The Custom Shop provides:
-- **Color Changes**: Modify base color, hair color, and shade
-- **Variation Changes**: Switch between head/face variations
-- **Preview System**: See changes before purchasing
-- **Appearance History**: Revert to previous looks
-- **Cosmetic Items**: Purchase and apply special cosmetics (future)
+- **Element Synthesis**: Add elemental attributes to weapons using element items
+- **Photon Fortification**: Enhance fully-grinded weapons with photon power
+- **Weapon Customization**: Advanced modifications beyond basic grinding
+- **Special Properties**: Imbue weapons with unique capabilities
 
 ## User Interface
 
-### Customization Screen
+### Main Menu
 
-**Left Panel - Character Preview**:
-- 3D character model with current customization
-- Rotate and zoom controls
-- Real-time preview of changes
-- Animation toggle (idle, run, attack poses)
+When accessing the Custom Shop, players see two service options:
 
-**Right Panel - Customization Options**:
-- Color selection (base, hair, shade)
-- Variation selection (head/face options)
-- Accessory options (future)
-- Price display for each change
-- Apply/Cancel buttons
+**Element Synthesis** (highlighted in screenshot):
+- Add elemental attributes to weapons
+- Requires element items (possibly obtained from Photon Collector)
+- Imbues weapon with fire, ice, lightning, or other elemental damage
 
-### Customization Categories
+**Photon Fortification**:
+- Enhance fully-grinded weapons
+- Requires weapon to be at maximum grind level
+- Adds photon-based enhancements beyond normal grinding limits
 
-**Base Color** (5 options):
-- Color 0 (default)
-- Color 1
-- Color 2
-- Color 3
-- Color 4
+**UI Elements**:
+- Service options displayed in vertical list
+- Selected option highlighted in orange
+- Text prompt at bottom: "Select from the Menu."
 
-**Hair Color** (3 options):
-- Hair 0 (default)
-- Hair 1
-- Hair 2
+### Service Flow (Element Synthesis)
 
-**Shade** (3 options):
-- Shade 0 (light)
-- Shade 1 (medium)
-- Shade 2 (dark)
+*Note: Exact mechanics need testing in-game*
 
-**Head Variation** (4 options):
-- Variation 0
-- Variation 1
-- Variation 2
-- Variation 3
+**Presumed Flow**:
+1. Select "Element Synthesis" from menu
+2. Choose weapon from inventory to modify
+3. Select element type (requires element item in inventory)
+4. Confirm synthesis
+5. Weapon gains elemental attribute
+6. Element item consumed, meseta may be charged
 
-### Preview and Confirmation
+**Requirements**:
+- Weapon in inventory (not equipped)
+- Element item obtained (possibly from Photon Collector or quest rewards)
+- Sufficient meseta for service fee
 
-1. **Select Options**: Choose new colors/variations
-2. **Preview**: See changes in real-time on 3D model
-3. **View Price**: Total cost displayed
-4. **Confirm**: Apply changes and deduct meseta
-5. **Cancel**: Revert to original appearance
+### Service Flow (Photon Fortification)
+
+*Note: Exact mechanics need testing in-game*
+
+**Presumed Flow**:
+1. Select "Photon Fortification" from menu
+2. Choose fully-grinded weapon from inventory
+3. Confirm fortification
+4. Weapon receives photon enhancement
+5. Materials consumed, meseta charged
+
+**Requirements**:
+- Weapon must be at maximum grind level (+10 or class-specific max)
+- Photon materials (possibly Photon Drops/Crystals)
+- Sufficient meseta for service fee
 
 ## Server API
 
-### Get Customization Options
+*Note: API endpoints are preliminary and need validation through in-game testing*
 
-**Endpoint**: `GET /api/shop/custom/options`
+### Get Available Services
+
+**Endpoint**: `GET /api/shop/custom/services`
 
 **Query Parameters**:
 - `characterId`: UUID of the character
@@ -88,59 +97,64 @@ The Custom Shop provides:
 **Response**:
 ```json
 {
-  "currentAppearance": {
-    "race": "Human",
-    "class": "HUmar",
-    "baseColor": 0,
-    "hairColor": 0,
-    "shade": 0,
-    "headVariation": 0,
-    "modelPath": "/models/characters/humar_v0.glb",
-    "texturePath": "/textures/characters/humar_v0_c0_h0_s0.png"
-  },
-  "availableOptions": {
-    "baseColors": [
-      { "id": 0, "name": "Default", "price": 0, "current": true },
-      { "id": 1, "name": "Color 1", "price": 1000, "current": false },
-      { "id": 2, "name": "Color 2", "price": 1000, "current": false },
-      { "id": 3, "name": "Color 3", "price": 1000, "current": false },
-      { "id": 4, "name": "Color 4", "price": 1000, "current": false }
+  "services": [
+    {
+      "serviceId": "element_synthesis",
+      "serviceName": "Element Synthesis",
+      "description": "Add elemental attributes to weapons",
+      "available": true
+    },
+    {
+      "serviceId": "photon_fortification",
+      "serviceName": "Photon Fortification",
+      "description": "Enhance fully-grinded weapons",
+      "available": true
+    }
+  ],
+  "inventory": {
+    "weapons": [
+      {
+        "itemInstanceId": "uuid-v4",
+        "itemId": "sword_001",
+        "itemName": "Sword",
+        "grindLevel": 5,
+        "maxGrindLevel": 10,
+        "elementType": null,
+        "canSynthesize": true,
+        "canFortify": false
+      }
     ],
-    "hairColors": [
-      { "id": 0, "name": "Default", "price": 0, "current": true },
-      { "id": 1, "name": "Hair 1", "price": 500, "current": false },
-      { "id": 2, "name": "Hair 2", "price": 500, "current": false }
+    "elementItems": [
+      {
+        "itemInstanceId": "uuid-v4",
+        "itemId": "fire_element",
+        "itemName": "Fire Element",
+        "quantity": 1
+      }
     ],
-    "shades": [
-      { "id": 0, "name": "Light", "price": 0, "current": true },
-      { "id": 1, "name": "Medium", "price": 500, "current": false },
-      { "id": 2, "name": "Dark", "price": 500, "current": false }
-    ],
-    "headVariations": [
-      { "id": 0, "name": "Variation 0", "price": 0, "current": true },
-      { "id": 1, "name": "Variation 1", "price": 2000, "current": false },
-      { "id": 2, "name": "Variation 2", "price": 2000, "current": false },
-      { "id": 3, "name": "Variation 3", "price": 2000, "current": false }
+    "photonMaterials": [
+      {
+        "itemInstanceId": "uuid-v4",
+        "itemId": "photon_drop",
+        "itemName": "Photon Drop",
+        "quantity": 3
+      }
     ]
   },
   "characterMeseta": 15000
 }
 ```
 
-### Apply Customization
+### Element Synthesis
 
-**Endpoint**: `POST /api/shop/custom/apply`
+**Endpoint**: `POST /api/shop/custom/element-synthesis`
 
 **Request**:
 ```json
 {
   "characterId": "uuid-v4",
-  "customization": {
-    "baseColor": 2,
-    "hairColor": 1,
-    "shade": 1,
-    "headVariation": 1
-  }
+  "weaponInstanceId": "uuid-v4",
+  "elementItemId": "uuid-v4"
 }
 ```
 
@@ -148,39 +162,39 @@ The Custom Shop provides:
 ```json
 {
   "success": true,
-  "message": "Appearance updated successfully",
-  "totalCost": 4000,
-  "updatedAppearance": {
-    "baseColor": 2,
-    "hairColor": 1,
-    "shade": 1,
-    "headVariation": 1,
-    "modelPath": "/models/characters/humar_v1.glb",
-    "texturePath": "/textures/characters/humar_v1_c2_h1_s1.png"
+  "message": "Element synthesis successful! Your weapon now has Fire attribute.",
+  "serviceCost": 5000,
+  "updatedWeapon": {
+    "itemInstanceId": "uuid-v4",
+    "itemName": "Sword [Fire]",
+    "elementType": "fire",
+    "elementLevel": 10,
+    "stats": {
+      "atp": 100,
+      "bonusDamage": "+10% vs Ice enemies"
+    }
   },
-  "characterMeseta": 11000
+  "consumedItems": ["fire_element"],
+  "characterMeseta": 10000
 }
 ```
 
 **Error Responses**:
-- `400 Bad Request`: Invalid customization options for character's race/class
+- `400 Bad Request`: Weapon already has element or invalid element item
 - `402 Payment Required`: Insufficient meseta
-- `404 Not Found`: Character not found
+- `404 Not Found`: Weapon or element item not found in inventory
+- `409 Conflict`: Weapon is currently equipped
 
-### Preview Customization (No Cost)
+### Photon Fortification
 
-**Endpoint**: `POST /api/shop/custom/preview`
+**Endpoint**: `POST /api/shop/custom/photon-fortification`
 
 **Request**:
 ```json
 {
   "characterId": "uuid-v4",
-  "customization": {
-    "baseColor": 2,
-    "hairColor": 1,
-    "shade": 1,
-    "headVariation": 1
-  }
+  "weaponInstanceId": "uuid-v4",
+  "photonMaterialIds": ["uuid-v4", "uuid-v4"]
 }
 ```
 
@@ -188,163 +202,171 @@ The Custom Shop provides:
 ```json
 {
   "success": true,
-  "previewData": {
-    "modelPath": "/models/characters/humar_v1.glb",
-    "texturePath": "/textures/characters/humar_v1_c2_h1_s1.png",
-    "estimatedCost": 4000
-  }
+  "message": "Photon fortification successful! Your weapon has been enhanced.",
+  "serviceCost": 10000,
+  "updatedWeapon": {
+    "itemInstanceId": "uuid-v4",
+    "itemName": "Sword +10 [Photon]",
+    "grindLevel": 10,
+    "photonLevel": 1,
+    "stats": {
+      "atp": 150,
+      "specialAbility": "Photon Burst"
+    }
+  },
+  "consumedItems": ["photon_drop", "photon_crystal"],
+  "characterMeseta": 5000
 }
 ```
 
+**Error Responses**:
+- `400 Bad Request`: Weapon not at maximum grind level
+- `402 Payment Required`: Insufficient meseta or materials
+- `404 Not Found`: Weapon or materials not found
+- `409 Conflict`: Weapon is currently equipped
+
 ## Pricing Structure
 
-### Base Customization Prices
+*Note: Exact pricing needs validation through in-game testing*
 
-**Color Changes**:
-- Base Color change: 1,000 meseta per change
-- Hair Color change: 500 meseta per change
-- Shade change: 500 meseta per change
+### Element Synthesis Costs
 
-**Variation Changes**:
-- Head Variation change: 2,000 meseta per change
+**Estimated Pricing**:
+- Service fee: 5,000-10,000 meseta (TBD)
+- Element item consumed (1x Fire/Ice/Lightning/etc. element)
+- Higher-tier elements may cost more
 
-**Free Options**:
-- Returning to default (option 0) is free
-- No charge for keeping current appearance
+**Element Types** (presumed):
+- Fire Element
+- Ice Element
+- Lightning Element
+- Light Element
+- Dark Element
+- Wind Element (possibly)
 
-### Calculation Logic
+### Photon Fortification Costs
 
-Total cost = sum of changes from current state:
-- If current baseColor = 0, changing to baseColor = 2 costs 1,000
-- If current hairColor = 0, changing to hairColor = 1 costs 500
-- If keeping shade = 0, no charge for shade
-- If changing headVariation = 0 to 1, costs 2,000
+**Estimated Pricing**:
+- Service fee: 10,000-20,000 meseta (TBD)
+- Photon materials required (Photon Drops, Photon Crystals)
+- Higher fortification levels may require more materials
 
-Example: Changing from default (c0_h0_s0_v0) to (c2_h1_s1_v1) = 1,000 + 500 + 500 + 2,000 = 4,000 meseta
+**Material Requirements** (presumed):
+- Photon Drop x2-3
+- Photon Crystal x1-2
+- Additional rare materials for higher levels
 
 ## Database Integration
 
-### Character Appearance Storage
+### Weapon Modification Storage
 
-Appearance is stored in `character_state` table (see [Character Create](/screens/character-create)):
+Weapon attributes are stored in `item_instances` table (see [Weapons](/mechanics/weapons)):
 
 ```sql
--- Update appearance
-UPDATE character_state
-SET appearance = jsonb_set(
+-- Update weapon with element
+UPDATE item_instances
+SET attributes = jsonb_set(
   jsonb_set(
-    jsonb_set(
-      jsonb_set(
-        appearance,
-        '{baseColor}', '2'
-      ),
-      '{hairColor}', '1'
-    ),
-    '{shade}', '1'
+    attributes,
+    '{elementType}', '"fire"'
   ),
-  '{headVariation}', '1'
+  '{elementLevel}', '10'
 )
-WHERE character_id = $1;
+WHERE item_instance_id = $1;
+
+-- Update weapon with photon fortification
+UPDATE item_instances
+SET attributes = jsonb_set(
+  attributes,
+  '{photonLevel}', '1'
+)
+WHERE item_instance_id = $1 AND attributes->>'grindLevel' = '10';
 ```
 
 ### Event Sourcing
 
-Customization changes are recorded as events:
+Weapon customization changes are recorded as events:
 
 ```typescript
+// Element Synthesis
 {
-  eventType: 'CHARACTER_APPEARANCE_CHANGED',
+  eventType: 'WEAPON_ELEMENT_SYNTHESIS',
   eventData: {
-    previousAppearance: {
-      baseColor: 0,
-      hairColor: 0,
-      shade: 0,
-      headVariation: 0
-    },
-    newAppearance: {
-      baseColor: 2,
-      hairColor: 1,
-      shade: 1,
-      headVariation: 1
-    },
-    cost: 4000,
+    weaponInstanceId: 'uuid-v4',
+    weaponName: 'Sword',
+    elementType: 'fire',
+    elementLevel: 10,
+    elementItemConsumed: 'fire_element',
+    serviceCost: 5000,
     mesetaBefore: 15000,
-    mesetaAfter: 11000,
-    texturePath: '/textures/characters/humar_v1_c2_h1_s1.png',
-    modelPath: '/models/characters/humar_v1.glb'
+    mesetaAfter: 10000
+  }
+}
+
+// Photon Fortification
+{
+  eventType: 'WEAPON_PHOTON_FORTIFICATION',
+  eventData: {
+    weaponInstanceId: 'uuid-v4',
+    weaponName: 'Sword +10',
+    photonLevel: 1,
+    materialsConsumed: ['photon_drop', 'photon_crystal'],
+    serviceCost: 10000,
+    mesetaBefore: 15000,
+    mesetaAfter: 5000
   }
 }
 ```
 
-## Texture Path Generation
-
-The texture path is computed based on customization:
-
-```typescript
-function generateTexturePath(
-  race: string,
-  class: string,
-  variation: number,
-  baseColor: number,
-  hairColor: number,
-  shade: number
-): string {
-  const classPrefix = class.toLowerCase(); // e.g., "humar"
-  return `/textures/characters/${classPrefix}_v${variation}_c${baseColor}_h${hairColor}_s${shade}.png`;
-}
-
-// Example: HUmar with v1, c2, h1, s1
-// Returns: /textures/characters/humar_v1_c2_h1_s1.png
-```
-
-Model path generation:
-
-```typescript
-function generateModelPath(
-  race: string,
-  class: string,
-  variation: number
-): string {
-  const classPrefix = class.toLowerCase();
-  return `/models/characters/${classPrefix}_v${variation}.glb`;
-}
-
-// Example: HUmar with v1
-// Returns: /models/characters/humar_v1.glb
-```
-
 ## Implementation Notes
 
-### Client-Side Preview
+*Note: These are preliminary guidelines subject to validation through gameplay testing*
 
-For smooth UX, implement client-side preview:
-1. Load all texture variants for current character during sync
-2. Swap textures on 3D model in real-time as user selects options
-3. Calculate cost on client and verify on server
-4. Only commit changes when user confirms
+### Material Acquisition
 
-### Asset Management
+**Element Items**:
+- Possibly obtained from Photon Collector (see reference if documented)
+- May be quest rewards
+- Could be enemy drops from elemental enemies
+- Possibly craftable or purchaseable elsewhere
 
-Since all assets are pre-cached (see [Sync](/screens/sync)):
-- All textures for current character class already downloaded
-- Model variations already cached
-- Preview is instant with no loading time
-- Switching between options is seamless
+**Photon Materials**:
+- Photon Drops: Rare enemy drops
+- Photon Crystals: Very rare drops or quest rewards
+- May require trading multiple drops for crystals
+
+### Weapon Requirements
+
+**For Element Synthesis**:
+- Weapon must not already have an element
+- Weapon must be in inventory (not equipped)
+- Must have appropriate element item
+- Some weapon types may not support elements
+
+**For Photon Fortification**:
+- Weapon must be at maximum grind level (+10 or class max)
+- Weapon must be in inventory (not equipped)
+- Must have required photon materials
+- May have level/class restrictions
 
 ### Validation
 
 Server must validate:
-- Character owns the character being customized
-- Customization options are valid for the character's race/class
+- Character owns the weapon being modified
+- Weapon meets requirements for selected service
+- Required materials are in inventory
 - Character has sufficient meseta
-- Texture and model paths exist
+- Weapon is not currently equipped
 
 ### Transaction Atomicity
 
 ```sql
 BEGIN TRANSACTION;
-  -- Update character appearance
-  UPDATE character_state SET appearance = $newAppearance WHERE character_id = $id;
+  -- Update weapon attributes
+  UPDATE item_instances SET attributes = $newAttributes WHERE item_instance_id = $weaponId;
+
+  -- Remove consumed materials from inventory
+  DELETE FROM character_inventory WHERE item_instance_id IN ($materialIds);
 
   -- Deduct meseta
   UPDATE character_state SET meseta = meseta - $cost WHERE character_id = $id;
@@ -354,39 +376,47 @@ BEGIN TRANSACTION;
 COMMIT;
 ```
 
-## Appearance Constraints
+## Weapon Customization Effects
 
-### Race-Specific Constraints
+### Element Synthesis Effects (Presumed)
 
-Each race has different customization options:
-- **Humans**: 4 variations, 5 colors, 3 hair, 3 shades
-- **CASTs**: Different model parts, metallic textures
-- **Newmans**: Elf-like features, different ear/hair options
+**Elemental Damage**:
+- Weapon gains bonus damage of selected element type
+- Effective against enemies weak to that element
+- May reduce effectiveness against resistant enemies
+- Element level (1-100%) determines bonus strength
 
-### Class-Specific Constraints
+**Elemental Types**:
+- Fire: Bonus vs ice/nature enemies
+- Ice: Bonus vs fire/electric enemies
+- Lightning: Bonus vs mechanical/water enemies
+- Light: Bonus vs dark enemies
+- Dark: Bonus vs light enemies
 
-Each class within a race has unique models:
-- HUmar, HUnewearl, HUcast, etc. each have distinct appearance sets
-- Cannot mix customization across classes
-- Variations are class-specific
+### Photon Fortification Effects (Presumed)
+
+**Enhanced Stats**:
+- Further increases ATP beyond grind cap
+- May add special abilities or photon blast
+- Visual effect changes (glowing weapon)
+- Potential stat bonuses beyond raw damage
 
 ## Security Considerations
 
-- Validate all customization options server-side
-- Prevent invalid texture/model path injection
-- Check meseta balance before applying
+- Validate all weapon modifications server-side
+- Prevent item duplication exploits
+- Check meseta and material availability before applying
+- Verify weapon ownership and eligibility
 - Rate limit customization requests
-- Log all appearance changes for audit
+- Log all modifications for audit trail
 
 ## Future Enhancements
 
-- **Cosmetic Items**: Hats, glasses, accessories
-- **Premium Customization**: Special colors or effects for real money
-- **Seasonal Cosmetics**: Limited-time appearance options
-- **Saved Presets**: Save multiple appearance configurations
-- **Random Appearance**: Randomize all options for fun
-- **Appearance Vouchers**: Free customization tickets from quests
-- **Preview Emotes**: Preview character with different animations
-- **Screenshot Feature**: Capture character appearance to share
-- **Appearance History**: View and revert to past appearances
-- **Voice Options**: Change character voice lines (if applicable)
+- **Multiple Element Levels**: Upgrade element strength over time
+- **Element Changing**: Replace existing element with different one
+- **Photon Levels**: Multiple tiers of photon fortification
+- **Special Abilities**: Unique weapon skills from customization
+- **Visual Customization**: Change weapon appearance/color
+- **Combination Effects**: Synergy between element and photon
+- **Material Trading**: Exchange materials with other players
+- **Customization Preview**: See stats before committing

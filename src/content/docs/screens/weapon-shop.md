@@ -3,7 +3,9 @@ title: Weapon Shop
 description: Buy and sell weapons, armor, and units
 ---
 
-The Weapon Shop is accessed from the [City](/screens/city) hub and allows players to purchase and sell weapons, armor (frames and shields), and units with meseta.
+![Weapon Shop Menu](/screenshots/shop-weapon-buy.png)
+
+The Weapon Shop is accessed from the [City](/screens/city) hub and allows players to purchase and sell weapons, armor (frames and shields), and units with meseta. The shop offers three categories of equipment with randomized low-level items that change between visits.
 
 ## Screen Flow
 
@@ -20,77 +22,65 @@ City → /city/shop/weapons → Browse/Buy/Sell equipment → Return to City
 ## Purpose
 
 The Weapon Shop provides:
-- **Weapon Sales**: Purchase swords, guns, wands, and other weapons
-- **Armor Sales**: Buy frames and shields for defense
-- **Unit Sales**: Purchase stat-boosting units
-- **Equipment Trading**: Sell unwanted equipment for meseta
-- **Stat Comparison**: Compare equipment stats before purchasing
-- **Level Progression**: Access to better equipment as character levels up
+- **Weapon Sales**: Purchase randomized low-level common weapons with varying attributes
+- **Armor Sales**: Buy basic frames and armor pieces
+- **Unit Sales**: Purchase stat-boosting units like Rookie/Power and resistance units
+- **Equipment Trading**: Sell unwanted equipment for meseta (shares interface with Item Shop)
+- **Random Inventory**: Stock changes between visits, encouraging regular checks
 
 ## User Interface
 
-### Shop Layout
+### Main Menu
 
-**Left Panel - Shop Inventory**:
-- Tabbed interface: Weapons / Armor / Units
-- Equipment list with icons and names
-- Stats preview (ATP, DFP, ATA, etc.)
-- Price in meseta
-- Level requirement indicator
-- Class restriction tags
+When accessing the Weapon Shop, you see three category options:
 
-**Right Panel - Character Equipment**:
-- Currently equipped weapon, armor, units
-- Character stats with current equipment
-- Stat comparison when selecting shop items
-- Meseta balance
-- Inventory slots available
+![Weapons Category](/screenshots/weapon-shop-weapons.png)
 
-**Middle Panel - Equipment Details**:
-- Selected equipment's full stats
-- 3D model preview (for weapons/armor)
-- Description and lore text
-- Special abilities or effects
-- Class/race requirements
-- Purchase or sell button
+**Weapons** (highlighted in main menu):
+- Low-level common weapons with randomized attributes
+- Examples: Cutlass (410 meseta), Blade (380 meseta), Daggers (453 meseta), Handgun (422 meseta), Ein Pistol (260 meseta)
+- Different weapon types available each visit
+- No fixed inventory - varies between visits
 
-### Equipment Categories
-
-**Weapons**:
-- Melee (Swords, Sabers, Spears, Claws, Daggers)
-- Ranged (Pistols, Rifles, Launchers, Mechs)
-- Technique (Wands, Rods, Canes)
-- Hybrid (Gun Blades)
+![Armor Category](/screenshots/weapon-shop-armor.png)
 
 **Armor**:
-- Frames (Light, Medium, Heavy)
-- Shields (Small, Medium, Large)
+- Basic frames and armor pieces
+- Examples: Normal Frame (550 meseta), Robe (675 meseta)
+- Some items may be class-restricted (red prohibited icon shown)
+- Limited selection of low-tier armor
+
+![Units Category](/screenshots/weapon-shop-units.png)
 
 **Units**:
-- HP Units
-- TP Units
-- Stat Boost Units (ATP, DFP, MST, etc.)
-- Resistance Units
-- Special Ability Units
+- Stat-boosting and resistance units
+- Examples: Rookie/Power (700 meseta), Rookie/Hit (700 meseta), Ice Resist Lv 1 (700 meseta), Stun Resist Lv 1 (700 meseta)
+- All units shown are priced at 700 meseta
+- Provides basic stat increases and elemental/status resistances
 
-### Stat Comparison
+### Buy Interface Layout
 
-When selecting equipment to purchase:
-```
-Current Weapon: Cutlass
-  ATP: 56-72
-  ATA: +5
-  Requirements: Level 1
+**Shop Inventory List**:
+- Items displayed in vertical list with prices
+- Currently selected item highlighted in orange
+- Item icon on left, name in center, price on right
+- Scrollable list to view all available items in category
 
-Shop Item: Falchion
-  ATP: 78-95         [+22 ATP ↑]
-  ATA: +8            [+3 ATA ↑]
-  Requirements: Level 5
+**Character Info (Top Right)**:
+- **Item Pack**: Shows inventory slots (22/40 in screenshots)
+- Current meseta balance displayed at bottom (1290 in screenshots)
 
-Price: 2,500 meseta
-```
+**Action Prompt**:
+- "Choose the item you wish to buy." displayed at bottom
 
-Green arrows (↑) for improvements, red arrows (↓) for downgrades.
+### Sell Interface
+
+**Note**: The Weapon Shop sell interface is **shared with the Item Shop** (same UI and functionality).
+
+See [Item Shop Sell Interface](/screens/item-shop#sell-interface) for details on:
+- Inventory filter tabs (Usable, Weapon, Armor, Special)
+- Item listing and selection
+- Sell price calculation
 
 ## Server API
 
