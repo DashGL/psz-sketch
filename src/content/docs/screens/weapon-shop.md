@@ -3,9 +3,11 @@ title: Weapon Shop
 description: Buy and sell weapons, armor, and units
 ---
 
-![Weapon Shop Menu](/screenshots/shop-weapon-buy.png)
+![Weapon Shop NPC](/screenshots/shop-weapon.png)
 
 The Weapon Shop is accessed from the [City](/screens/city) hub and allows players to purchase and sell weapons, armor (frames and shields), and units with meseta. The shop offers three categories of equipment with randomized low-level items that change between visits.
+
+![Weapon Shop Menu](/screenshots/shop-weapon-buy.png)
 
 ## Screen Flow
 
