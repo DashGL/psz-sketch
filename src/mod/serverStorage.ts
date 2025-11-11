@@ -1,15 +1,21 @@
 /**
  * Server-side storage
- * Uses MongoDB for persistent storage in production
- * Falls back to in-memory storage in development
+ * - Users: MongoDB (persistent)
+ * - Challenges: Redis with TTL (temporary, auto-expire)
  */
 
 import { getCollection } from './mongodb';
-import type { UserDocument, ChallengeDocument } from './collections';
+import type { UserDocument } from './collections';
 
 // Re-export types for convenience
 export type User = UserDocument;
-export type ChallengeData = ChallengeDocument;
+
+export interface ChallengeData {
+  fingerprint: string;
+  challenge: string;
+  timestamp: number;
+  expiresIn: number;
+}
 
 // Check if MongoDB is configured
 const USE_MONGODB = !!process.env.MONGODB_URI;
@@ -55,38 +61,39 @@ export const users = {
 };
 
 /**
- * Challenges collection wrapper
+ * Challenges storage
+ * Always uses in-memory storage since challenges are temporary (2 min TTL)
+ * In production, expired challenges are cleaned up periodically
  */
 export const challenges = {
   async get(fingerprint: string): Promise<ChallengeData | undefined> {
-    if (USE_MONGODB) {
-      const collection = await getCollection<ChallengeData>('challenges');
-      const challenge = await collection.findOne({ fingerprint });
-      return challenge || undefined;
+    const data = inMemoryChallenges.get(fingerprint);
+
+    // Check if expired
+    if (data) {
+      const now = Date.now();
+      const expiresAt = data.timestamp + data.expiresIn;
+      if (now > expiresAt) {
+        // Expired, delete and return undefined
+        inMemoryChallenges.delete(fingerprint);
+        return undefined;
+      }
     }
-    return inMemoryChallenges.get(fingerprint);
+
+    return data;
   },
 
   async set(fingerprint: string, data: ChallengeData): Promise<void> {
-    if (USE_MONGODB) {
-      const collection = await getCollection<ChallengeData>('challenges');
-      await collection.updateOne(
-        { fingerprint },
-        { $set: data },
-        { upsert: true }
-      );
-    } else {
-      inMemoryChallenges.set(fingerprint, data);
-    }
+    inMemoryChallenges.set(fingerprint, data);
+
+    // Schedule automatic cleanup after expiry
+    setTimeout(() => {
+      inMemoryChallenges.delete(fingerprint);
+    }, data.expiresIn);
   },
 
   async delete(fingerprint: string): Promise<void> {
-    if (USE_MONGODB) {
-      const collection = await getCollection<ChallengeData>('challenges');
-      await collection.deleteOne({ fingerprint });
-    } else {
-      inMemoryChallenges.delete(fingerprint);
-    }
+    inMemoryChallenges.delete(fingerprint);
   },
 };
 

@@ -19,12 +19,15 @@ export default defineConfig({
 			JWT_SECRET: envField.string({ context: 'server', access: 'secret' }),
 		}
 	},
-	session: {
-		driver: 'redis',
-		options: {
-			url: process.env.REDIS_URL,
-		},
-	},
+	// Session configuration
+	// Using default cookie-based sessions for now
+	// TODO: Switch to Redis sessions once Redis connection is working
+	// session: {
+	// 	driver: 'redis',
+	// 	options: {
+	// 		url: process.env.REDIS_URL,
+	// 	},
+	// },
 	integrations: [
 		react(),
 		starlight({

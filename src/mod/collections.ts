@@ -63,72 +63,17 @@ const UsersIndexes = [
 ];
 
 /**
- * Challenge Collection
- * Stores authentication challenges (temporary, short-lived)
- */
-export interface ChallengeDocument {
-  fingerprint: string;       // User fingerprint
-  challenge: string;         // Random challenge string (base64)
-  timestamp: number;         // Unix timestamp (milliseconds)
-  expiresIn: number;         // TTL in milliseconds
-}
-
-const ChallengesCollectionSchema = {
-  validator: {
-    $jsonSchema: {
-      bsonType: 'object',
-      required: ['fingerprint', 'challenge', 'timestamp', 'expiresIn'],
-      properties: {
-        fingerprint: {
-          bsonType: 'string',
-          description: 'User fingerprint',
-        },
-        challenge: {
-          bsonType: 'string',
-          description: 'Base64-encoded random challenge',
-        },
-        timestamp: {
-          bsonType: 'number',
-          description: 'Unix timestamp in milliseconds',
-        },
-        expiresIn: {
-          bsonType: 'number',
-          description: 'TTL in milliseconds',
-        },
-      },
-    },
-  },
-  validationAction: 'error',
-  validationLevel: 'moderate',
-};
-
-const ChallengesIndexes = [
-  {
-    key: { fingerprint: 1 },
-    unique: true,
-    name: 'fingerprint_unique',
-  },
-  {
-    key: { timestamp: 1 },
-    name: 'timestamp_idx',
-    expireAfterSeconds: 120, // Auto-delete after 2 minutes (MongoDB TTL, matches expiresIn)
-  },
-];
-
-/**
  * Collection Definitions
  * Add new collections here as the application grows
+ *
+ * Note: Challenges are NOT stored in MongoDB - they use in-memory storage
+ * with automatic expiration since they're temporary (2 min TTL)
  */
 export const COLLECTIONS = {
   users: {
     name: 'users',
     schema: UsersCollectionSchema,
     indexes: UsersIndexes,
-  },
-  challenges: {
-    name: 'challenges',
-    schema: ChallengesCollectionSchema,
-    indexes: ChallengesIndexes,
   },
 } as const;
 
