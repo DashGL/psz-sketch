@@ -5,10 +5,11 @@
  */
 
 import type { APIRoute } from 'astro';
-import { users, challenges } from '../../lib/serverStorage';
-import { verifySignature, generateJWT } from '../../lib/serverCrypto';
+import { users, challenges } from '../../mod/serverStorage';
+import { verifySignature, generateJWT } from '../../mod/serverCrypto';
+import { createUserSession } from '../../mod/sessionManager';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, session }) => {
   try {
     const body = await request.json();
     const { fingerprint, signature } = body;
@@ -68,6 +69,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Generate JWT
     const jwt = generateJWT(fingerprint);
+
+    // Create session for the authenticated user
+    await createUserSession(session, fingerprint);
 
     return new Response(
       JSON.stringify({ jwt }),

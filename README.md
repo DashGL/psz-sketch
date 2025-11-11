@@ -41,33 +41,62 @@ npm run dev
 
 ## 🏗️ Project Structure
 
+```mermaid
+graph TD
+    root["/"]
+
+    root --> docs["docs/<br/><small>Additional documentation</small>"]
+    root --> public["public/<br/><small>Static assets</small>"]
+    root --> src["src/<br/><small>Source code</small>"]
+    root --> config["astro.config.mjs<br/><small>Astro configuration</small>"]
+
+    docs --> auth_doc["AUTHENTICATION.md"]
+    docs --> test_doc["test-results.md"]
+    docs --> arch_dir["architecture/<br/><small>Mermaid diagrams</small>"]
+
+    public --> logo["logo.svg"]
+    public --> screenshots["screenshots/"]
+    public --> assets_img["assets/img/<br/><small>logo.png</small>"]
+
+    src --> assets["assets/<br/><small>Images & media</small>"]
+    src --> components["components/<br/><small>React components</small>"]
+    src --> content["content/<br/><small>Starlight docs</small>"]
+    src --> layouts["layouts/<br/><small>Page layouts</small>"]
+    src --> lib["lib/<br/><small>Client libraries</small>"]
+    src --> mod["mod/<br/><small>Server libraries</small>"]
+    src --> pages["pages/<br/><small>Routes & endpoints</small>"]
+
+    components --> comp_title["title/<br/><small>SpaceScene.tsx</small>"]
+    components --> comp_docs["docs/<br/><small>MermaidDiagram.tsx</small>"]
+
+    lib --> auth_client["authService.ts<br/><small>Client auth flow</small>"]
+    lib --> key_mgr["keyManager.ts<br/><small>Key generation & storage</small>"]
+
+    mod --> server_crypto["serverCrypto.ts<br/><small>JWT & signature verification</small>"]
+    mod --> server_storage["serverStorage.ts<br/><small>In-memory storage</small>"]
+
+    pages --> api["api/<br/><small>API endpoints</small>"]
+    pages --> title_page["title.astro<br/><small>Title screen</small>"]
+    pages --> sync_page["sync.astro<br/><small>Asset sync screen</small>"]
+    pages --> diagrams["diagrams/<br/><small>Mermaid diagram pages</small>"]
+
+    api --> challenge["challenge.ts<br/><small>POST /api/challenge</small>"]
+    api --> authenticate["authenticate.ts<br/><small>POST /api/authenticate</small>"]
+
+    style root fill:#e1f5ff
+    style src fill:#fff3e0
+    style lib fill:#e8f5e9
+    style mod fill:#fce4ec
+    style components fill:#f3e5f5
+    style pages fill:#fff9c4
 ```
-.
-├── docs/                    # Additional documentation
-│   ├── AUTHENTICATION.md   # Auth system guide
-│   ├── test-results.md     # Test results
-│   └── architecture/       # Mermaid diagrams
-├── public/                 # Static assets
-│   ├── logo.svg           # Game logo
-│   └── screenshots/       # UI screenshots
-├── src/
-│   ├── content/
-│   │   └── docs/          # Starlight documentation
-│   ├── layouts/           # Page layouts
-│   ├── lib/               # Shared libraries
-│   │   ├── authService.ts      # Client auth
-│   │   ├── keyManager.ts       # Key generation
-│   │   ├── serverCrypto.ts     # Server crypto
-│   │   └── serverStorage.ts    # In-memory storage
-│   └── pages/
-│       ├── api/           # API endpoints
-│       │   ├── challenge.ts    # POST /api/challenge
-│       │   └── authenticate.ts # POST /api/authenticate
-│       ├── title.astro    # Title screen
-│       └── sync.astro     # Asset sync screen
-├── astro.config.mjs       # Astro configuration
-└── package.json
-```
+
+### Key Directories
+
+- **`src/lib/`** - Client-side libraries (browser APIs: IndexedDB, Web Crypto, sessionStorage)
+- **`src/mod/`** - Server-side libraries (Node.js: crypto, JWT signing)
+- **`src/components/`** - Feature-organized React components (title/, docs/)
+- **`src/pages/api/`** - Server API endpoints (challenge, authenticate)
 
 ## 🧞 Commands
 

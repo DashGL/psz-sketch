@@ -10,10 +10,14 @@ export default defineConfig({
 	adapter: node({
 		mode: 'standalone'
 	}),
+	session: {
+		// Node adapter includes a default session driver
+		// Using in-memory storage for development (use Redis in production)
+	},
 	integrations: [
 		react(),
 		starlight({
-			title: 'Density Dwarf',
+			title: 'psz-sketch',
 			head: [
 				{
 					tag: 'script',

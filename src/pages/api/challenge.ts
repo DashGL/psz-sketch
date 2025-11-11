@@ -7,8 +7,8 @@
 
 import type { APIRoute } from 'astro';
 import { randomBytes } from 'node:crypto';
-import { users, challenges } from '../../lib/serverStorage';
-import { verifyFingerprint } from '../../lib/serverCrypto';
+import { users, challenges } from '../../mod/serverStorage';
+import { verifyFingerprint } from '../../mod/serverCrypto';
 
 export const POST: APIRoute = async ({ request }) => {
   try {

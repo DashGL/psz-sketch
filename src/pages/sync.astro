@@ -1,15 +1,17 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import AuthenticatedLayout from '../layouts/AuthenticatedLayout.astro';
+
+export const prerender = false;
 ---
 
-<Layout title="Sync - Density Dwarf">
+<AuthenticatedLayout title="Sync - Density Dwarf">
   <div class="sync-screen">
     <h1>Sync Screen</h1>
     <p>Asset synchronization would happen here.</p>
     <p>This is a placeholder for the sync functionality described in the architecture.</p>
     <a href="/screens/character-select" class="next-button">Continue to Character Select</a>
   </div>
-</Layout>
+</AuthenticatedLayout>
 
 <style>
   .sync-screen {
