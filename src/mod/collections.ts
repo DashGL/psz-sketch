@@ -153,14 +153,24 @@ export async function initializeCollections(db: Db): Promise<void> {
         console.log(`  ✨ Creating collection: ${name}`);
         await db.createCollection(name, schema);
       } else {
-        // Update validation schema for existing collection
-        console.log(`  ♻️  Updating collection schema: ${name}`);
-        await db.command({
-          collMod: name,
-          validator: schema.validator,
-          validationLevel: schema.validationLevel,
-          validationAction: schema.validationAction,
-        });
+        // Try to update validation schema for existing collection
+        // Note: This requires collMod permission which may not be available in MongoDB Atlas
+        try {
+          console.log(`  ♻️  Updating collection schema: ${name}`);
+          await db.command({
+            collMod: name,
+            validator: schema.validator,
+            validationLevel: schema.validationLevel,
+            validationAction: schema.validationAction,
+          });
+        } catch (error: any) {
+          // Ignore permission errors (common in MongoDB Atlas)
+          if (error.code === 8000 || error.codeName === 'AtlasError') {
+            console.log(`  ⚠️  Skipping schema update (insufficient permissions): ${name}`);
+          } else {
+            throw error;
+          }
+        }
       }
 
       // Create or update indexes
