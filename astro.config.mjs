@@ -6,6 +6,9 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
+	// Set to your production URL when deployed
+	// Update this to your custom domain or Vercel URL
+	site: process.env.SITE_URL || 'https://psz-sketch.vercel.app',
 	output: 'server',
 	adapter: vercel(),
 	env: {
