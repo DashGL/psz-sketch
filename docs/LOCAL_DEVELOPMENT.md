@@ -154,9 +154,9 @@ JWT_SECRET=dev-secret-change-in-production-12345678
 
 If you prefer to use cloud services for development:
 
-**For Upstash Redis:**
+**For cloud Redis provider:**
 ```env
-REDIS_URL=rediss://default:your-password@your-endpoint.upstash.io:6379
+REDIS_URL=rediss://default:your-password@your-redis-endpoint:6379
 ```
 
 **For MongoDB Atlas:**
@@ -414,12 +414,12 @@ sudo systemctl start redis
 
 Connection string: `redis://localhost:6379`
 
-### Cloud Services (Upstash + MongoDB Atlas)
+### Cloud Services (Redis + MongoDB Atlas)
 
 You can also develop entirely with cloud services:
 
 1. **Sign up for MongoDB Atlas**: https://www.mongodb.com/cloud/atlas/register
-2. **Sign up for Upstash**: https://console.upstash.com/
+2. **Sign up for a Redis provider**: Choose from Vercel KV, Railway, Redis Labs, etc.
 3. **Get connection strings** from both dashboards
 4. **Update `.env.local`** with cloud credentials
 

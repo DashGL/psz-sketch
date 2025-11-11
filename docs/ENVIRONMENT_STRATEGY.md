@@ -26,7 +26,7 @@ We use **three environments**:
 | Variable | Value | Shared? | Notes |
 |----------|-------|---------|-------|
 | `JWT_SECRET` | Production secret | ✅ Shared with Production | **Same secret** allows tokens to work across environments |
-| `REDIS_URL` | Upstash URL | ✅ Shared with Production | **Same Redis** - sessions work across staging/prod |
+| `REDIS_URL` | Redis URL | ✅ Shared with Production | **Same Redis** - sessions work across staging/prod |
 | `MONGODB_URI` | Staging MongoDB Atlas | ❌ Staging only | **Separate database** - test DB changes safely |
 
 **Source**: Vercel Environment Variables (Preview environment)
@@ -36,7 +36,7 @@ We use **three environments**:
 | Variable | Value | Shared? | Notes |
 |----------|-------|---------|-------|
 | `JWT_SECRET` | Production secret | ✅ Shared with Staging | Same as staging for consistency |
-| `REDIS_URL` | Upstash URL | ✅ Shared with Staging | Same as staging - shared session store |
+| `REDIS_URL` | Redis URL | ✅ Shared with Staging | Same as staging - shared session store |
 | `MONGODB_URI` | Production MongoDB Atlas | ❌ Production only | **Separate database** - protected prod data |
 
 **Source**: Vercel Environment Variables (Production environment)
@@ -58,7 +58,7 @@ We use **three environments**:
 ### Shared Redis (Staging + Production)
 
 **Benefits:**
-- Single Upstash Redis instance (cost-effective)
+- Single Redis instance (cost-effective)
 - Sessions persist across deployments
 - Simpler infrastructure
 
@@ -108,9 +108,9 @@ MONGODB_URI=mongodb://psz_user:psz_password@localhost:27017/psz-sketch?authSourc
 3. Copy connection string
 4. Save for Vercel config
 
-#### 2. Create Upstash Redis (Shared)
+#### 2. Create Redis (Shared)
 
-1. Go to Upstash Console
+1. Go to your Redis provider's console
 2. Create database: `psz-sketch-redis`
 3. Copy connection URL
 4. This will be used for **both** staging and production
@@ -132,7 +132,7 @@ In Vercel Dashboard → Settings → Environment Variables:
 - Environments: ✅ Production ✅ Preview ✅ Development
 
 **REDIS_URL:**
-- Value: Your Upstash Redis URL
+- Value: Your Redis URL
 - Environments: ✅ Production ✅ Preview ✅ Development
 
 **MONGODB_URI (Production):**
@@ -221,7 +221,7 @@ With separate staging/production databases, your workflow is:
 
 ❌ Production secrets (`.env`, `.env.production`)
 ❌ MongoDB Atlas passwords (real ones)
-❌ Upstash Redis URLs (real ones)
+❌ Redis URLs (real ones)
 
 ✅ Local Docker credentials (`.env.local`)
 - Already public in `docker-compose.yml`
@@ -251,12 +251,12 @@ If you want **complete isolation** between staging and production:
 ```
 Staging:
 - JWT_SECRET_STAGING (different)
-- REDIS_URL_STAGING (different Upstash instance)
+- REDIS_URL_STAGING (different Redis instance)
 - MONGODB_URI_STAGING (different database)
 
 Production:
 - JWT_SECRET (different)
-- REDIS_URL (different Upstash instance)
+- REDIS_URL (different Redis instance)
 - MONGODB_URI (different database)
 ```
 

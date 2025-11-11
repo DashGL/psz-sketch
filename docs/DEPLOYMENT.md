@@ -1,12 +1,12 @@
 # Deployment Guide
 
-This guide covers deploying the Density Dwarf application to Vercel with Redis (Upstash) for session management and MongoDB Atlas for persistent storage.
+This guide covers deploying the Density Dwarf application to Vercel with Redis for session management and MongoDB Atlas for persistent storage.
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [MongoDB Atlas Setup](#mongodb-atlas-setup)
-- [Redis Setup (Upstash)](#redis-setup-upstash)
+- [Redis Setup](#redis-setup)
 - [Environment Variables](#environment-variables)
 - [Deployment Process](#deployment-process)
 - [CI/CD Workflows](#cicd-workflows)
@@ -16,7 +16,7 @@ This guide covers deploying the Density Dwarf application to Vercel with Redis (
 
 - [Vercel Account](https://vercel.com/signup)
 - [MongoDB Atlas Account](https://www.mongodb.com/cloud/atlas/register)
-- [Upstash Account](https://upstash.com/) for Redis
+- Redis provider (Vercel KV, Railway, Redis Labs, or any compatible Redis service)
 - [Vercel CLI](https://vercel.com/docs/cli) installed (optional but recommended)
 
 ```bash
@@ -59,38 +59,45 @@ npm install -g vercel
 4. Replace `<password>` with your actual database user password
 5. Save this for environment variables
 
-## Redis Setup (Upstash)
+## Redis Setup
 
-Upstash provides serverless Redis that's perfect for Vercel deployments.
+You need a Redis database for session management. You can use any Redis provider that supports standard Redis connections.
 
-### 1. Create Upstash Redis Database
+### Recommended Redis Providers
 
-1. Log in to [Upstash Console](https://console.upstash.com/)
-2. Click "Create Database"
+- **Vercel KV** (if using Vercel integration)
+- **Railway** - Easy setup, generous free tier
+- **Redis Labs/Redis Cloud** - Enterprise-grade
+- **DigitalOcean Managed Redis** - Simple pricing
+- **Any self-hosted Redis** with TLS
+
+### 1. Create Redis Database
+
+Choose your provider and create a new Redis database:
+
+1. Sign up for your chosen Redis provider
+2. Create a new Redis database
 3. Configure your database:
    - **Name**: `psz-sketch-sessions` (or your preferred name)
-   - **Type**: Select **Regional** (cheaper) or **Global** (faster worldwide)
-   - **Region**: Choose same region as your Vercel deployment (e.g., `us-east-1`)
+   - **Region**: Choose same region as your Vercel deployment for best performance
    - **TLS**: Enable (recommended for security)
-4. Click "Create"
+4. Create the database
 
 ### 2. Get Redis Connection URL
 
-1. After creation, you'll see your database dashboard
-2. Scroll to **REST API** section
-3. Copy the **UPSTASH_REDIS_REST_URL** - this is your `REDIS_URL`
-4. The format will be: `rediss://default:your-password@your-endpoint.upstash.io:6379`
-5. Save this for environment variables
+1. After creation, find your connection string/URL
+2. The format should be: `rediss://default:your-password@your-redis-endpoint:6379`
+   - Note: Use `rediss://` (with double 's') for TLS connections
+   - Or `redis://` for non-TLS (not recommended for production)
+3. Save this URL for environment variables
 
-### 3. Optional: Vercel Integration
+### 3. Vercel Integration (Optional)
 
-Upstash offers a Vercel integration for easier setup:
+Some providers offer Vercel marketplace integrations for easier setup:
 
 1. Go to [Vercel Marketplace](https://vercel.com/integrations)
-2. Search for "Upstash"
-3. Click "Add Integration"
-4. Follow the prompts to link your Upstash account
-5. This will automatically set `REDIS_URL` in your Vercel project
+2. Search for your Redis provider
+3. If available, add the integration to automatically configure `REDIS_URL`
 
 **Or manually set the environment variable** (see next section)
 
@@ -103,7 +110,7 @@ Configure these in your Vercel project settings (**Settings → Environment Vari
 | Variable | Environments | Description |
 |----------|--------------|-------------|
 | `JWT_SECRET` | ✅ Production ✅ Preview | **Shared** - Same secret for staging + production |
-| `REDIS_URL` | ✅ Production ✅ Preview | **Shared** - Same Upstash Redis for staging + production |
+| `REDIS_URL` | ✅ Production ✅ Preview | **Shared** - Same Redis instance for staging + production |
 | `MONGODB_URI` (Staging) | ✅ Preview only | **Separate** - Staging MongoDB Atlas URL |
 | `MONGODB_URI` (Production) | ✅ Production only | **Separate** - Production MongoDB Atlas URL |
 | `MONGODB_DB_NAME` | ✅ Production ✅ Preview | Database name (can be same or different) |
@@ -129,7 +136,7 @@ See [ENVIRONMENT_STRATEGY.md](ENVIRONMENT_STRATEGY.md) for complete explanation.
 
 **Add REDIS_URL (Shared):**
 - Key: `REDIS_URL`
-- Value: Your Upstash Redis URL (`rediss://...`)
+- Value: Your Redis URL (`rediss://...`)
 - Environments: ✅ Production ✅ Preview
 - Click "Save"
 
@@ -180,7 +187,7 @@ REDIS_URL=redis://localhost:6379
 
 **Note**: For local development, you can either:
 - Install Redis locally: `brew install redis` (macOS) or use Docker
-- Use Upstash and point to your development database
+- Use a cloud Redis provider and point to your development database
 - Leave `REDIS_URL` unset to use in-memory session storage (fallback)
 
 3. Pull Vercel environment variables (optional):
@@ -256,10 +263,10 @@ In your Vercel project settings (**Settings → Git**):
 
 ## Architecture Overview
 
-### Session Storage (Redis/Upstash)
+### Session Storage (Redis)
 
 - **Purpose**: Server-side session management for authenticated pages
-- **Technology**: Redis via Upstash (serverless Redis)
+- **Technology**: Redis (any compatible provider)
 - **Usage**: Stores user sessions after JWT authentication
 - **Expiration**: 1 hour (configurable in `sessionManager.ts`)
 
@@ -279,7 +286,7 @@ graph LR
     B -->|3. Return Challenge| A
     A -->|4. Sign Challenge| D[Client Crypto]
     D -->|5. Submit Signature| E[API: /api/authenticate]
-    E -->|6. Verify & Create Session| F[Redis/Upstash]
+    E -->|6. Verify & Create Session| F[Redis]
     E -->|7. Return JWT| A
     A -->|8. Access Protected Page| G[Server validates session]
     G -->|9. Check Session| F
@@ -309,8 +316,8 @@ graph LR
 
 **Solution**:
 1. Ensure `REDIS_URL` environment variable is set in Vercel
-2. Check Upstash Redis database is running and accessible
-3. Verify connection string format: `rediss://default:password@host.upstash.io:6379`
+2. Check Redis database is running and accessible
+3. Verify connection string format: `rediss://default:password@your-redis-host:6379`
 4. Redeploy after setting environment variable
 
 ### Build Failures
@@ -399,7 +406,7 @@ Before going live:
 ### Database Setup
 - [ ] MongoDB Atlas **staging** cluster created
 - [ ] MongoDB Atlas **production** cluster created (separate!)
-- [ ] Upstash Redis database created (shared for staging + production)
+- [ ] Redis database created (shared for staging + production)
 - [ ] Database backups enabled in Atlas for both clusters
 
 ### Vercel Configuration

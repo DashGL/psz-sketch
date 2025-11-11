@@ -4,7 +4,7 @@
 
 **Shared across staging + production:**
 - `JWT_SECRET` - Same secret everywhere
-- `REDIS_URL` - Same Upstash Redis instance
+- `REDIS_URL` - Same Redis instance
 
 **Separate per environment:**
 - `MONGODB_URI` - Different database for staging vs production
@@ -19,9 +19,9 @@
 - [ ] Create production cluster: `psz-sketch-production`
 - [ ] Copy both connection strings
 
-### Upstash Redis (1 database - shared)
+### Redis (1 database - shared)
 
-- [ ] Create Redis database: `psz-sketch-redis`
+- [ ] Create Redis database (any provider)
 - [ ] Copy connection URL
 - [ ] Use for both staging and production
 
@@ -32,7 +32,7 @@ Set in: **Vercel Dashboard → Settings → Environment Variables**
 | Variable | Value | Environments |
 |----------|-------|--------------|
 | `JWT_SECRET` | `openssl rand -base64 32` | ✅ Production ✅ Preview |
-| `REDIS_URL` | Upstash Redis URL | ✅ Production ✅ Preview |
+| `REDIS_URL` | Your Redis URL | ✅ Production ✅ Preview |
 | `MONGODB_URI` | **Staging** MongoDB URL | ✅ Preview **only** |
 | `MONGODB_URI` | **Production** MongoDB URL | ✅ Production **only** |
 | `MONGODB_DB_NAME` | `psz-sketch` | ✅ Production ✅ Preview |

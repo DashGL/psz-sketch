@@ -178,7 +178,7 @@ Visit the documentation site for:
 
 The application is configured for deployment to Vercel with:
 
-- **Redis (Upstash)**: Serverless Redis for session management (shared across staging + production)
+- **Redis**: Session management (shared across staging + production)
 - **MongoDB Atlas**: Persistent storage for users and challenges (separate staging + production databases)
 - **CI/CD**: Automatic deployments on push to `main`, preview deployments for PRs
 
@@ -191,7 +191,7 @@ Quick reference: [ENVIRONMENTS.md](ENVIRONMENTS.md)
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for complete deployment guide including:
 - MongoDB Atlas setup (staging + production)
-- Upstash Redis configuration
+- Redis configuration
 - Environment variable configuration
 - CI/CD workflows
 - Troubleshooting
@@ -208,7 +208,7 @@ Test results: [docs/test-results.md](docs/test-results.md)
 - **Database**: MongoDB with automatic schema initialization
   - Production: MongoDB Atlas
   - Development: Docker (local)
-- **Sessions**: Redis via Upstash (production), Docker (development)
+- **Sessions**: Redis (cloud provider for production), Docker (development)
 - **JWT**: jsonwebtoken for API authentication
 - **Adapter**: @astrojs/vercel (SSR)
 - **Schema Management**: Code-first with automatic collection initialization
